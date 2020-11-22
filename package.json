@@ -12,7 +12,7 @@
     "pack": "npm run pack:main && npm run pack:renderer",
     "pack:main": "cross-env NODE_ENV=production webpack --progress --colors --config .electron-vue/webpack.main.config.js",
     "pack:renderer": "cross-env NODE_ENV=production webpack --progress --colors --config .electron-vue/webpack.renderer.config.js",
-    "postinstall": ""
+    "postinstall": "electron-rebuild"
   },
   "main": "./dist/electron/main.js",
   "dependencies": {
@@ -104,5 +104,5 @@
       "icon": "build/icons"
     }
   },
-  "license": null
+  "license": ""
 }
