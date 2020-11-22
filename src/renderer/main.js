@@ -8,12 +8,22 @@ import store from './store'
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 
+import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
+import 'bootstrap/dist/css/bootstrap.css'
+import 'bootstrap-vue/dist/bootstrap-vue.css'
+
+// Elements
 Vue.use(ElementUI);
+
+// Install BootstrapVue
+Vue.use(BootstrapVue)
+// Optionally install the BootstrapVue icon components plugin
+Vue.use(IconsPlugin)
 
 const customTitlebar = require('custom-electron-titlebar');
 
 new customTitlebar.Titlebar({
-  backgroundColor: customTitlebar.Color.fromHex('#333'),
+  backgroundColor: customTitlebar.Color.fromHex('#fff'),
   icon: require('./assets/logo_singal.png')
 });
 
@@ -28,3 +38,17 @@ new Vue({
   store,
   template: '<App/>'
 }).$mount('#app')
+
+
+let blabla = [
+  [0,1, 2, 3, 4, 5 ,6 ,7, 8],
+  [0,1, 2, 3, 4, 5 ,6 ,7, 8],
+  [0,1, 2, 3, 4, 5 ,6 ,7, 8],
+  [0,1, 2, 3, 4, 5 ,6 ,7, 8],
+  [0,1, 2, 3, 4, 5 ,6 ,7, 8],
+  [0,1, 2, 3, 4, 5 ,6 ,7, 8],
+  [0,1, 2, 3, 4, 5 ,6 ,7, 8],
+  [0,1, 2, 3, 4, 5 ,6 ,7, 8],
+  [0,1, 2, 3, 4, 5 ,6 ,7, 8],
+];
+blabla[6][8];

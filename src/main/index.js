@@ -25,7 +25,7 @@ function createWindow () {
     width: 1000,
     titleBarStyle: "hidden",
     titleHorizontalAlignment: "left",
-    frame: false
+    // frame: false
   })
 
   mainWindow.loadURL(winURL)

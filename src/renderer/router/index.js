@@ -1,24 +1,26 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Index from '../components/Index'
-// import LandingPage from "../components/LandingPage";
+import Setting from "../components/Setting";
+import jiyiSkills_108_section2 from "../components/projects/jiyiSkills_108_section2";
 Vue.use(Router)
 
 export default new Router({
   routes: [
-    // {
-    //   path: '/',
-    //   name: 'landing-page',
-    //   component: require('@/components/LandingPage').default
-    // },
     {
       path: '/',
       name: 'Index',
       component: Index
     },
     {
-      path: '*',
-      redirect: '/'
+      path: '/setting',
+      name: 'Setting',
+      component: Setting
+    },
+    {
+      path: '/project/108-2',
+      name: 'jiyiSkills_108_section2',
+      component: jiyiSkills_108_section2
     }
   ]
 })
