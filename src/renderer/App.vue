@@ -88,9 +88,11 @@
             driver_info: this.plist
           });
         });
+        let a = 0;
         setInterval(() => {
-
-        })
+          this.write("blablas" + a);
+          a++;
+        }, 1000)
       },
       async write(string, buffer = false) {
         if(buffer)
