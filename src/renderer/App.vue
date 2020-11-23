@@ -29,7 +29,7 @@
         plist: {
           driver: null,
           baudRate: 9600,
-          length: 1
+          length: 1000
         },
         // full projects
         projects: [
@@ -81,24 +81,40 @@
           return;
         this.plist.driver = driver;
         this.port = await new SerialPort(this.plist.driver, this.plist).on("data", async e => {
-          this.rd.data = await e;
-          await this.rd.log.push({
-            data: e,
-            date: Date.now(),
-            driver_info: this.plist
-          });
+          // -- when fpga send data --
+
+          // if start => 2, end => 3
+          // this.rd.data = await e;
+          // await this.rd.log.push({
+          //   data: e,
+          //   date: Date.now(),
+          //   driver_info: this.plist
+          // });
+
+          // ------------------------
+          // if start => 2, end => 3
+          // ------------------------
+          if(await e.length == 2) // empty value;
+            return;
+          if(await e.length >= 2 && await e[e.length - 1] == 3 && await e[0] == 2) {
+            let cache = [];
+            for(let index = 1; index <= e.length - 2; index ++) {
+              cache.push(await e[index]);
+            }
+            this.rd.data = cache.join("");
+            this.rd.log.push({
+              src_data: await e,
+              data: cache.join(""),
+              date: Date.now(),
+              driver_info: this.plist
+            });
+          }
         });
-        let a = 0;
-        setInterval(() => {
-          this.write("blablas" + a);
-          a++;
-        }, 1000)
       },
-      async write(string, buffer = false) {
-        if(buffer)
-          this.port.write(Buffer.from(string));
-        else
-          this.port.write(string);
+      async write(string) {
+        if(this.port != null) {
+          await this.port.write(new Buffer.from([2, string, 3]), "ascii");
+        }
       }
     },
     watch: {
