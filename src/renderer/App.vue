@@ -3,14 +3,14 @@
     <el-container>
       <el-aside width="20%">
         <Navbar :all_ports="all_ports" :plist="plist" :port="port" :projects="projects" :rd="rd" :tx="tx"
-                @connectDriver="connectDriver" @reset="reset">
+                @connectDriver="connectDriver" @reset="reset" @write="write"
 
         </Navbar>
       </el-aside>
       <el-container>
         <el-main>
           <router-view :all_ports="all_ports" :plist="plist" :port="port" :projects="projects" :rd="rd" :tx="tx"
-                       @connectDriver="connectDriver" @reset="reset">
+                       @connectDriver="connectDriver" @reset="reset" @write="write">
 
           </router-view>
         </el-main>
@@ -35,15 +35,19 @@
         projects: [
           {
             title: "108年 技藝競賽-數位電子(第二站)",
-            url: "./project/108-2"
+            url: "/project/108-2"
           },
           {
             title: "109年 技藝競賽-數位電子(公告)",
-            url: "./project/109-2-public"
+            url: "/project/109-2-public"
           },
           {
             title: "109年 技藝競賽-數位電子(模擬賽2-鶯歌)",
-            url: "./project/109-2-visual2"
+            url: "/project/109-2-visual2"
+          },
+          {
+            title: "109年 技藝競賽-數位電子(第二站)",
+            url: "/project/109-2"
           }
         ],
         port: null,
@@ -82,7 +86,8 @@
         this.plist.driver = driver;
         this.port = await new SerialPort(this.plist.driver, this.plist).on("data", async e => {
           // -- when fpga send data --
-
+          
+          // console.log(e);
           // if start => 2, end => 3
           // this.rd.data = await e;
           // await this.rd.log.push({
@@ -99,7 +104,7 @@
           if(await e.length >= 2 && await e[e.length - 1] == 3 && await e[0] == 2) {
             let cache = [];
             for(let index = 1; index <= e.length - 2; index ++) {
-              cache.push(await e[index]);
+              cache.push(String.fromCharCode(await e[index]));
             }
             this.rd.data = cache.join("");
             this.rd.log.push({
@@ -113,17 +118,23 @@
       },
       async write(string) {
         if(this.port != null) {
-          await this.port.write(new Buffer.from([2, string, 3]), "ascii");
+          // let data = new Buffer.from([2, string, 3]);
+          // await this.port.write(data, "ascii");
+          await this.port.write(new Buffer.from([2]), "ascii");
+          await this.port.write(string, "ascii");
+          await this.port.write(new Buffer.from([3]), "ascii");
+          console.log(string, "發送的資料");
         }
       }
     },
     watch: {
-      rd: {
-        handler (newV, oldV) {
-          console.log(newV.data);
-        },
-        deep: true
-      }
+      // rd: {
+      //   handler (newV, oldV) {
+      //     console.log(newV.data);
+      //   },
+      //   deep: true
+      // }
+
     }
   }
 </script>
@@ -229,6 +240,11 @@
     justify-content: flex-end;
   }
   .fsc {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+  }
+  .flc {
     display: flex;
     align-items: center;
     justify-content: flex-start;
